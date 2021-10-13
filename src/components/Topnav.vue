@@ -20,7 +20,7 @@
 export default {
     props: ['user'],
     methods: {
-        handleClick: function() {
+        handleClick() {
             this.$store.commit('setAuthentication', false);
             this.$store.commit('setUser', null);
             this.$router.replace({ name: 'login' });

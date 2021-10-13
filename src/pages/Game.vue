@@ -64,39 +64,41 @@ export default {
             loading: true,
         };
     },
+    // computed() {
+    //     game(){
+    //         return
+    //     }
+    // },
     async mounted() {
-        const { data } = await axios.get(`/api/game/${this.game_id}`);
-        if (!data) {
-            return this.$router.push({ name: 'hone' });
-        }
-        this.game = {
-            ...data,
-            gamestate: JSON.parse(data.gamestate),
-            winner: data.winner && JSON.parse(data.winner),
-        };
-
-        const player_1 = await axios.get(`/api/user/${this.game.player_1}`);
-        const player_2 = await axios.get(`/api/user/${this.game.player_2}`);
-        this.game.player_1 = player_1.data;
-        this.game.player_2 = player_2.data;
-
         socket.emit('join_room', this.game_id);
-        socket.on('user_joined', (game_id) => {
-            console.log('A user joined the game:', game_id);
+        await this.updateGame();
+        socket.on('game_update', () => {
+            this.updateGame();
         });
-        socket.on('game_update', (game) => {
-            this.game.turn = game.turn;
-            this.game.gamestate = game.gamestate;
-            if (game.winner) {
-                this.game.winner = JSON.parse(game.winner);
-            }
-        });
-        // socket.on('placeTile', ({ index, player }) => {
-        //     $('.position')
-        //         .eq(index)
-        //         .addClass('player-' + player);
-        // });
         this.loading = false;
+    },
+    methods: {
+        async updateGame() {
+            const { data } = await axios.get(`/api/game/${this.game_id}`);
+            const player_1 = await axios.get(`/api/user/${data.player_1}`);
+            const player_2 = await axios.get(`/api/user/${data.player_2}`);
+
+            if (!data) {
+                return this.$router.push({ name: 'hone' });
+            }
+
+            return new Promise((resolve) => {
+                this.game = {
+                    ...data,
+                    gamestate: JSON.parse(data.gamestate),
+                    gamestateTEST: data.gamestate,
+                    winner: data.winner && JSON.parse(data.winner),
+                };
+                this.game.player_1 = player_1.data;
+                this.game.player_2 = player_2.data;
+                resolve();
+            });
+        },
     },
 };
 </script>

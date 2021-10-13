@@ -35,7 +35,7 @@ INSERT INTO users (email, username, password_hash, image_url) VALUES ('tommy@gma
 
 
 -- create some games
-INSERT INTO games (player_1, player_2, turn, accepted, gamestate) VALUES (1, 2, 2, TRUE,'[0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1]');
+INSERT INTO games (player_1, player_2, turn, accepted, gamestate) VALUES (1, 2, 1, TRUE,'[0,0,0,0,2,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,1]');
 INSERT INTO games (player_1, player_2, turn, accepted, gamestate) VALUES (2, 3, 3, TRUE,'[0,0,0,0,0,2,0,0,0,0,0,3,0,0,0,0,0,2,0,0,0,0,0,3,0,0,0,0,0,2,0,0,0,0,0,3,0,0,0,0,0,2]');
 INSERT INTO games (player_1, player_2, turn, accepted, gamestate) VALUES (3, 1, 3, TRUE,'[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]');
 INSERT INTO games (player_1, player_2, turn, accepted, gamestate) VALUES (4, 5, 4, TRUE,'[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]');

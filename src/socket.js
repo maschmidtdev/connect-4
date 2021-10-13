@@ -13,4 +13,8 @@ socket.on('login', () => {
     console.log('login successful!');
 });
 
+socket.on('user_joined', (game_id) => {
+    console.log('A user joined the game:', game_id);
+});
+
 export default socket;

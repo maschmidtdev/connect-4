@@ -19,7 +19,7 @@ export default {
     components: {
         GameCell,
     },
-    data: function() {
+    data() {
         return {
             loading: true,
             user: null,
@@ -40,7 +40,7 @@ export default {
     },
     watch: {},
     methods: {
-        onClick: function() {
+        onClick() {
             socket.emit('place_tile', {
                 col: this.col,
                 game_id: this.game.id,

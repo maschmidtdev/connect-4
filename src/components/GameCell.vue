@@ -2,7 +2,7 @@
     <div class="game-cell" type="text/x-template">
         <div class="position">
             <div class="circle" :class="classObject">
-                <!-- {{ position }} -->
+                {{ position }}
             </div>
         </div>
     </div>

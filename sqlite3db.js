@@ -40,12 +40,18 @@ const dbSetup = async (appListenFunction) => {
 async function getUserByEmail(email) {
     const db = await dbPromise;
     // console.log('[db:getUserByEmail]');
-    const users = await db.all('SELECT * FROM users WHERE email = ?', [email]);
+    const users = await db.all(
+        'SELECT id, username, email, wins, losses, image_url FROM users WHERE email = ?',
+        [email]
+    );
     return users.length > 0 ? users[0] : null;
 }
 async function getUserById(id) {
     const db = await dbPromise;
-    const users = await db.all('SELECT * FROM users WHERE id = ?', [id]);
+    const users = await db.all(
+        'SELECT id, username, email, wins, losses, image_url FROM users WHERE id = ?',
+        [id]
+    );
     return users.length > 0 ? users[0] : null;
 }
 async function getUsers() {
@@ -126,6 +132,7 @@ async function getChallengers(user_id) {
 async function getGames() {
     const db = await dbPromise;
     const games = await db.all(`SELECT * FROM games ORDER BY id ASC`);
+    // console.log('[sqlite3:getGames] games:', games);
     return games;
 }
 // async function getGamesByUser(user_id) {
@@ -150,6 +157,7 @@ async function getGames() {
 async function getGameById(game_id) {
     const db = await dbPromise;
     const games = await db.all(`SELECT * FROM games WHERE id = ?`, [game_id]);
+    // console.log('[sqlite3:getGameById] game:', games[0]);
     return games.length > 0 ? games[0] : null;
 }
 // async function getGame({ player_1, player_2 }) {
@@ -170,23 +178,26 @@ async function getGameById(game_id) {
 //             console.log(error);
 //         });
 // }
-// async function updateGame({ turn, gamestate, id, winner }) {
-//     const db = await dbPromise;
-//     return db
-//         .query(
-//             `UPDATE games SET turn = $1, gamestate = $2, winner = $3
-//               WHERE id = $4
-//               RETURNING *`,
-//             [turn, JSON.stringify(gamestate), winner, id]
-//         )
-//         .then((result) => {
-//             // console.log('[db:updateGame] result.rows', result.rows);
-//             return result.rows;
-//         })
-//         .catch((error) => {
-//             console.log(error);
-//         });
-// }
+async function updateGame({ turn, gamestate, id, winner }) {
+    const db = await dbPromise;
+
+    return new Promise((resolve, reject) => {
+        db.run(
+            `UPDATE games SET turn = ?, gamestate = ?, winner = ?
+            WHERE id = ?`,
+            // RETURNING *;`,
+            [turn, gamestate, winner, id],
+            // [turn, JSON.stringify(gamestate), winner, id],
+            async function(err) {
+                if (err) {
+                    reject(err.message);
+                }
+                resolve();
+            }
+        );
+        resolve();
+    });
+}
 // async function acceptGame({ player_1, player_2 }) {
 //     const db = await dbPromise;
 //     return db
@@ -219,7 +230,7 @@ module.exports = {
     // getGame,
     // getGamesByUser,
     getGameById,
-    // updateGame,
+    updateGame,
     // acceptGame,
     dbSetup,
 };
